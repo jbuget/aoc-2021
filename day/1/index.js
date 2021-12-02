@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 function countValuesLargerThanThePreviousOne(values) {
   let lastValue = null;
   return values.reduce((result, currentValue) => {
@@ -46,20 +44,4 @@ function partTwo(data) {
   return countValuesLargerThanThePreviousOne(windows);
 }
 
-function main() {
-  try {
-    // Input
-    const data = fs.readFileSync(`${__dirname}/input`, 'utf8');
-
-    // Process
-    const result = partTwo(data);
-
-    // Output
-    console.log(result);
-  } catch (err) {
-    console.error(err);
-    partOne.exit(1);
-  }
-}
-
-main();
+module.exports = [partOne, partTwo];
