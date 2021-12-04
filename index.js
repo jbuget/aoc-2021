@@ -4,7 +4,7 @@ function run(day, part) {
   try {
     // Input
     const parts = require(`${__dirname}/day/${day}`);
-    const data = fs.readFileSync(`${__dirname}/day/${day}/input`, 'utf8');
+    const data = fs.readFileSync(`${__dirname}/day/${day}/input.txt`, 'utf8');
 
     // Process
     let result = (part === 'one') ? parts[0](data) : parts[1](data);

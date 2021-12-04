@@ -117,7 +117,7 @@ function buildGameFromInput(data) {
   for (let i = 2 ; i < lines.length ; i++) {
     const board = new Board(boardIdSequence++);
     for (let j = 0 ; j < BOARD_SIZE ; j++) {
-      const line = lines[i+j].trim().replace('  ', ' ');
+      const line = lines[i+j].trim().replace(/\s+/g, ' ');
       line.split(' ').forEach((value, k) => {
         board.addNumber(value.trim(), j, k);
       });

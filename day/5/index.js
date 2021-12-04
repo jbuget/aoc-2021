@@ -1,9 +1,9 @@
 function partOne(data) {
-  return 'TODO';
+  // TODO
 }
 
 function partTwo(data) {
-  return 'TODO';
+  // TODO
 }
 
 module.exports = [partOne, partTwo];
