@@ -15,10 +15,12 @@ class BoardNumber {
 }
 
 class Board {
+  id;
   numbers;
   lastMarkedNumberValue;
 
-  constructor() {
+  constructor(id) {
+    this.id = id;
     this.numbers = new Array(BOARD_SIZE);
     for (let i = 0 ; i < BOARD_SIZE ; i++) {
       this.numbers[i] = new Array(BOARD_SIZE);
@@ -90,17 +92,32 @@ class Game {
     }
     return winningBoard;
   }
+
+  runSquidMode() {
+    while (this.boards.length > 1) {
+      const currentDrawnNumber = this.drawns.shift();
+      this.boards.forEach((board) => board.markNumber(currentDrawnNumber));
+      this.boards = this.boards.filter((board) => !board.isWinning());
+    }
+    const lastBoard = this.boards[0];
+    while (!lastBoard.isWinning()) {
+      const currentDrawnNumber = this.drawns.shift();
+      lastBoard.markNumber(currentDrawnNumber);
+    }
+    return lastBoard;
+  }
 }
 
 function buildGameFromInput(data) {
   const lines = data.split('\n');
   const drawns = lines[0].split(',');
   const boards = [];
+  let boardIdSequence = 1;
 
   for (let i = 2 ; i < lines.length ; i++) {
-    const board = new Board();
+    const board = new Board(boardIdSequence++);
     for (let j = 0 ; j < BOARD_SIZE ; j++) {
-      const line = lines[i+j].trim().replace(/\s{2,}/g, ' ');
+      const line = lines[i+j].trim().replace('  ', ' ');
       line.split(' ').forEach((value, k) => {
         board.addNumber(value.trim(), j, k);
       });
@@ -118,7 +135,9 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  // TODO
+  const game = buildGameFromInput(data);
+  const lastWinningBoard = game.runSquidMode();
+  return lastWinningBoard.getScore();
 }
 
 module.exports = [partOne, partTwo];
