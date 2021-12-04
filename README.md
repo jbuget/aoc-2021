@@ -11,7 +11,14 @@ $ npm install
 
 ## Usage
 
-```
+```bash
+# Initialize a day
+$ npm plop
+
+# Run tests
+$ npm start
+
+# Get a day part result
 $ npm start -- <day:number> <part:string>
 ```
 
