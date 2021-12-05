@@ -1,11 +1,9 @@
 class Point {
-  id;
   x;
   y;
   nbCoveringSegments;
 
   constructor(x, y, nbCoveringSegments) {
-    this.id = `${x}:${y}`;
     this.x = x;
     this.y = y;
     this.nbCoveringSegments = nbCoveringSegments || 0;
@@ -13,6 +11,10 @@ class Point {
 
   increaseNbCoveringSegments() {
     this.nbCoveringSegments++;
+  }
+
+  get id() {
+    return `${this.x}:${this.y}`;
   }
 }
 
@@ -59,7 +61,7 @@ class Diagram {
     for (let i = 0; i < 1000; i++) {
       this.points[i] = Array(1000);
     }
-    this.multipleTimesOverlappedPoints = [];
+    this.multipleTimesOverlappedPoints = new Map();
   }
 
   computeSegments(segments) {
@@ -102,9 +104,9 @@ class Diagram {
         point.increaseNbCoveringSegments();
 
         if (point.nbCoveringSegments >= 2) {
-          const alreadyMarkedPoint = this.multipleTimesOverlappedPoints.find((mtop) => mtop.id === point.id);
+          const alreadyMarkedPoint = this.multipleTimesOverlappedPoints.get(point.id);
           if (!alreadyMarkedPoint) {
-            this.multipleTimesOverlappedPoints.push(point);
+            this.multipleTimesOverlappedPoints.set(point.id, point);
           }
         }
       }
@@ -113,7 +115,7 @@ class Diagram {
 }
 
 function getSegmentsFromInput(data) {
-  return data.trim().split('\n').map((line) => {
+  return data.split('\n').map((line) => {
     const [s1, s2] = line.split(' -> ');
     const [x1, y1] = s1.split(',');
     const [x2, y2] = s2.split(',');

@@ -5,14 +5,14 @@ function partOne(data) {
   const horizontalOrVerticalSegments = getHorizontalOrVerticalSegments(segments);
   const diagram = new Diagram();
   diagram.computeSegments(horizontalOrVerticalSegments);
-  return diagram.multipleTimesOverlappedPoints.length;
+  return diagram.multipleTimesOverlappedPoints.size;
 }
 
 function partTwo(data) {
   const segments = getSegmentsFromInput(data);
   const diagram = new Diagram();
   diagram.computeSegments(segments);
-  return diagram.multipleTimesOverlappedPoints.length;
+  return diagram.multipleTimesOverlappedPoints.size;
 }
 
 module.exports = [partOne, partTwo];

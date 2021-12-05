@@ -1,7 +1,7 @@
 const [partOne, partTwo] = require('./index');
 const fs = require("fs");
 
-const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8');
+const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8').trim();
 
 describe('part one', () => {
 
