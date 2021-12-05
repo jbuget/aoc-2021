@@ -13,7 +13,7 @@ $ npm install
 
 ```bash
 # Initialize a day
-$ npm plop
+$ plop day <day:number>
 
 # Run tests
 $ npm start
