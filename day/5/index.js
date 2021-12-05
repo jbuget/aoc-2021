@@ -9,7 +9,10 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const segments = getSegmentsFromInput(data);
+  const diagram = new Diagram();
+  diagram.computeSegments(segments);
+  return diagram.multipleTimesOverlappedPoints.length;
 }
 
 module.exports = [partOne, partTwo];

@@ -6,8 +6,6 @@ const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8');
 describe('part one', () => {
 
   it('should ', () => {
-    // given
-
     // when
     const actual = partOne(data);
 
@@ -20,13 +18,11 @@ describe('part one', () => {
 describe('part two', () => {
 
   it('should ', () => {
-    // given
-
     // when
     const actual = partTwo(data);
 
     // then
-    const expected = 'TODO';
+    const expected = 12;
     expect(actual).toStrictEqual(expected);
   });
 });

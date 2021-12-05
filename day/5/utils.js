@@ -36,7 +36,7 @@ class Segment {
     if (this.y1 === this.y2) {
       return 'HORIZONTAL';
     }
-    return 'SKEW';
+    return 'DIAGONAL';
   }
 
   get length() {
@@ -46,7 +46,7 @@ class Segment {
     if (this.orientation === 'VERTICAL') {
       return Math.abs(this.y2 - this.y1) + 1;
     }
-    return null;
+    return Math.abs(this.x2 - this.x1) + 1;;
   }
 }
 
@@ -73,8 +73,21 @@ class Diagram {
             x = segment.x1 + i;
           }
           y = segment.y1;
-        } else {
+        }
+        if (segment.orientation === 'VERTICAL') {
           x = segment.x1;
+          if (segment.y1 > segment.y2) {
+            y = segment.y1 - i;
+          } else {
+            y = segment.y1 + i;
+          }
+        }
+        if (segment.orientation === 'DIAGONAL') {
+          if (segment.x1 > segment.x2) {
+            x = segment.x1 - i;
+          } else {
+            x = segment.x1 + i;
+          }
           if (segment.y1 > segment.y2) {
             y = segment.y1 - i;
           } else {

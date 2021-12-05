@@ -131,8 +131,18 @@ describe('Segment', () => {
       // then
       expect(actual).toBe('VERTICAL');
     });
-  });
 
+    it('should be "DIAGONAL"', () => {
+      // given
+      const segment = new Segment(0, 0, 2, 2);
+
+      // when
+      const actual = segment.orientation;
+
+      // then
+      expect(actual).toBe('DIAGONAL');
+    });
+  });
 
   describe('#length', () => {
 
@@ -158,15 +168,15 @@ describe('Segment', () => {
       expect(actual).toBe(3);
     });
 
-    xit('skewed', () => {
+    it('diagonal', () => {
       // given
-      const segment = new Segment(0, 0, 2, 2);
+      const segment = new Segment(3, 3, 0, 0);
 
       // when
       const actual = segment.length;
 
       // then
-      expect(actual).toBe(3);
+      expect(actual).toBe(4);
     });
   });
 });
