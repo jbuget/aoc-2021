@@ -12,7 +12,7 @@ class Point {
   increaseNbCoveringSegments() {
     this.nbCoveringSegments++;
   }
-
+  
   get id() {
     return `${this.x}:${this.y}`;
   }
@@ -97,10 +97,10 @@ class Diagram {
           }
         }
 
-        if (!this.points[y][x]) {
-          this.points[y][x] = new Point(x, y);
+        if (!this.points[x][y]) {
+          this.points[x][y] = new Point(x, y);
         }
-        const point = this.points[y][x];
+        const point = this.points[x][y];
         point.increaseNbCoveringSegments();
 
         if (point.nbCoveringSegments >= 2) {
