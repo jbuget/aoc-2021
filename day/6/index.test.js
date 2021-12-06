@@ -22,7 +22,7 @@ describe('part two', () => {
     const actual = partTwo(data);
 
     // then
-    const expected = 'TODO';
+    const expected = 26984457539;
     expect(actual).toStrictEqual(expected);
   });
 });
@@ -74,6 +74,5 @@ describe('Lanternfish', () => {
       expect(daddyLanternfish.length).toBe(10);
     });
   });
-
 
 });
