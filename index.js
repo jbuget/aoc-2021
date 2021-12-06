@@ -9,7 +9,7 @@ function run(day, part) {
     const data = fs.readFileSync(`${__dirname}/day/${day}/input.txt`, 'utf8').trim();
 
     // Process
-    let result = (part === 'one') ? parts[0](data) : parts[1](data);
+    let result = (part === 'one') ? parts.partOne(data) : parts.partTwo(data);
 
     // Output
     console.log('result:', result);

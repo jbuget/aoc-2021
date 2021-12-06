@@ -44,4 +44,4 @@ function partTwo(data) {
   return countValuesLargerThanThePreviousOne(windows);
 }
 
-module.exports = [partOne, partTwo];
+module.exports = { partOne, partTwo };

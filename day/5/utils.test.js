@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { Point, Diagram, Segment, getSegmentsFromInput, getHorizontalOrVerticalSegments } = require('./utils');
 
-const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8');
+const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8').trim();
 
 describe('#getSegmentsFromInput', () => {
 

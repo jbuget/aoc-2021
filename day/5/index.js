@@ -15,4 +15,4 @@ function partTwo(data) {
   return diagram.multipleTimesOverlappedPoints.size;
 }
 
-module.exports = [partOne, partTwo];
+module.exports = { partOne, partTwo };

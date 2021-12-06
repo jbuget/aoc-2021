@@ -134,4 +134,4 @@ function partTwo(data) {
   return getLifeSupportRating(oxygenGeneratorRating, cO2ScrubberRating);
 }
 
-module.exports = [partOne, partTwo];
+module.exports = { partOne, partTwo };

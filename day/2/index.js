@@ -36,4 +36,4 @@ function partTwo(data) {
 
 }
 
-module.exports = [partOne, partTwo];
+module.exports = { partOne, partTwo };

@@ -140,4 +140,4 @@ function partTwo(data) {
   return lastWinningBoard.getScore();
 }
 
-module.exports = [partOne, partTwo];
+module.exports = { partOne, partTwo };
