@@ -1,30 +1,30 @@
 function evaluatePopulation(values, nbDays) {
-  const fishesByAge = Array(9);
-  fishesByAge.fill(0);
+  const fishesByAge = Array(9).fill(0);
 
-  values.forEach(value => {
-    fishesByAge[value]++;
-  });
+  values.forEach(value => fishesByAge[value]++);
 
-  for (let d = 0 ; d < nbDays ; d++) {
+  let population = values.length;
+
+  for (let d = 0; d < nbDays; d++) {
     const pregnants = fishesByAge[0];
-    for (let i = 0 ; i < 8 ; i++) {
-      fishesByAge[i] = fishesByAge[i + 1];
+    for (let age = 0 ; age < 8 ; age++) {
+      fishesByAge[age] = fishesByAge[age + 1];
     }
     fishesByAge[6] = fishesByAge[6] + pregnants;
     fishesByAge[8] = pregnants;
+    population += pregnants;
   }
 
-  return fishesByAge.reduce((res, fishes) => res + fishes, 0);
+  return population;
 }
 
 function partOne(data) {
-  let values = data.split(',').map((value) => parseInt(value));
+  let values = data.split(',').map((value) => parseInt(value, 10));
   return evaluatePopulation(values, 80);
 }
 
 function partTwo(data) {
-  let values = data.split(',').map((value) => parseInt(value));
+  let values = data.split(',').map((value) => parseInt(value, 10));
   return evaluatePopulation(values, 256);
 }
 
