@@ -1,5 +1,5 @@
 const fs = require('fs');
-const [partOne, partTwo] = require('./index');
+const { partOne, partTwo } = require('./index');
 
 const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8').trim();
 
