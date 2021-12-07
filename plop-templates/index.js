@@ -6,4 +6,4 @@ function partTwo(data) {
   return 'TODO';
 }
 
-module.exports = [partOne, partTwo];
+module.exports = { partOne, partTwo };
