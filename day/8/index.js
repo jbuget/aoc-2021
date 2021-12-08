@@ -1,33 +1,3 @@
-class Segment {
-  possibleLetters;
-
-  constructor() {
-    this.possibleLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-  }
-
-  keepPossibleLetters(letters) {
-    if (!this.isDecoded) {
-      this.possibleLetters = this.possibleLetters.filter((letter) => letters.find(a => a === letter));
-    }
-  }
-
-  removePossibleLetters(letters) {
-    if (!this.isDecoded) {
-      this.possibleLetters = this.possibleLetters.filter((letter) => !letters.find(a => a === letter));
-    }
-  }
-
-  get isDecoded() {
-    return this.possibleLetters.length === 1;
-  }
-
-  get letter() {
-    if (this.isDecoded) {
-      return this.possibleLetters[0];
-    }
-  }
-}
-
 String.prototype.sort = function() {
   return this.split('').sort().join('');
 }
@@ -57,14 +27,14 @@ function partOne(data) {
 
 function partTwo(data) {
   const lines = data.split('\n');
-  const sumOfOutputValues = lines.reduce((count, line) => {
+  return lines.reduce((count, line) => {
     const [uniqueSignalPatternsValue, fourDigitOutputValue] = line.split(' | ');
 
     // compute Segments
     const signalPatterns = uniqueSignalPatternsValue.split(' ').map((signal) => signal.sort());
 
     const segments = Array(10);
-    segments.fill(-1);
+    segments.fill('');
 
     // 8 always equals 'abcdefg'
     segments[8] = 'abcdefg';
@@ -116,7 +86,6 @@ function partTwo(data) {
     let outputValue = parseInt(fourDigitOutputValue.split(' ').reduce((result, digit) => result + decode(digit), ''));
     return count + outputValue;
   }, 0);
-  return sumOfOutputValues;
 }
 
 module.exports = { partOne, partTwo };
