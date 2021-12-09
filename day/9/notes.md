@@ -78,3 +78,17 @@ Je visite donc le point "2:1". Comme ce n'est pas un `9`, je fais des trucs.
 - J'ajoute ses points adjacents non visités : "3:1" (5), "2:2" (9), "1:1" (7)
 
 > Hummm… il va falloir faire attention quand on va ajouter les autres adjacents ; ou alors il suffira de vérifier au moment de parcourir un adjacent depuis la liste, qu'il n'a pas déjà été visité.
+
+## Edit
+
+J'ai lu trop vite l'énoncé. Encore une fois 🤦‍
+
+On m'avertit dans l'oreillette de relire l'énoncé. (demander du feedback au plus tôt)
+
+Effectivement il y a la phrase :
+
+> … flow downward to a single low point
+ 
+Mais je me méfie du cas où 2 LowPpints appartiendraient au même Bassin. Apparemment, non.
+
+Je vais pouvoir simplifier l'algo et me contenter de partir des Lowpoints.

@@ -7,11 +7,36 @@ class Point {
   x;
   y;
   height;
+  isMarked;
 
   constructor(x, y, height) {
     this.x = x;
     this.y = y;
     this.height = height;
+    this.isMarked = false;
+  }
+
+  mark() {
+    this.isMarked = true;
+  }
+
+  get isWall() {
+    return this.height === 9;
+  }
+}
+
+class Basin {
+
+  constructor() {
+    this.points = [];
+  }
+
+  addPoint(point) {
+    this.points.push(point);
+  }
+
+  get size() {
+    return this.points.length;
   }
 }
 
@@ -59,6 +84,35 @@ class HeightMap {
     return lowerPoints;
   }
 
+  get basins() {
+    return this.lowerPoints.reduce((basins, lowerPoint) => {
+      const basin = new Basin();
+      const nodes = [];
+
+      nodes.push(lowerPoint);
+      while (nodes.length > 0) {
+        const point = nodes.shift();
+        if (!point.isMarked) {
+          point.mark();
+          basin.addPoint(point);
+
+          const up = this.points.get(key(point.x, point.y - 1));
+          const down = this.points.get(key(point.x, point.y + 1));
+          const left = this.points.get(key(point.x - 1, point.y));
+          const right = this.points.get(key(point.x + 1, point.y));
+
+          if (up && !up.isMarked && !up.isWall) nodes.push(up);
+          if (down && !down.isMarked && !down.isWall) nodes.push(down);
+          if (left && !left.isMarked && !left.isWall) nodes.push(left);
+          if (right && !right.isMarked && !right.isWall) nodes.push(right);
+        }
+      }
+
+      basins.push(basin);
+      return basins;
+    }, []);
+  }
+
   getSumOfRiskLevelsOfAllLowerPoints() {
     return this.lowerPoints.reduce((sum, point) => {
       return sum + 1 + point.height;
@@ -66,7 +120,8 @@ class HeightMap {
   }
 
   getMultiplicationOfTheSizesOfTheThreeLargestBasins() {
-
+    const basins = this.basins.sort((a, b) => b.size - a.size);
+    return basins[0].size * basins[1].size * basins[2].size;
   }
 }
 
