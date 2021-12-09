@@ -64,6 +64,10 @@ class HeightMap {
       return sum + 1 + point.height;
     }, 0);
   }
+
+  getMultiplicationOfTheSizesOfTheThreeLargestBasins() {
+
+  }
 }
 
 function partOne(data) {
@@ -72,7 +76,8 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const heightmap = new HeightMap(data);
+  return heightmap.getMultiplicationOfTheSizesOfTheThreeLargestBasins();
 }
 
 module.exports = { partOne, partTwo };
