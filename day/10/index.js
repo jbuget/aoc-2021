@@ -33,6 +33,33 @@ function getIllegalCharacterScore(char) {
   throw new Error(`Unknown character "${char}"`);
 }
 
+function getUncompletedCharacterScore(char) {
+  if (char === ')') return 1;
+  if (char === ']') return 2;
+  if (char === '}') return 3;
+  if (char === '>') return 4;
+  throw new Error(`Unknown character "${char}"`);
+}
+
+function getUncompletedCharacters(line) {
+  const expectedCharacters = [];
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (isOpeningCharacter(char)) {
+      expectedCharacters.unshift(getClosingCharacter(char));
+    } else {
+      expectedCharacters.shift();
+    }
+  }
+  return expectedCharacters;
+}
+
+function getIncompleteLineScore(expectedChars) {
+  return expectedChars.reduce((score, char) => {
+    return (score * 5) + getUncompletedCharacterScore(char);
+  }, 0);
+}
+
 function partOne(data) {
   const lines = data.trim().split('\n');
   return lines.reduce((sum, line) => {
@@ -42,7 +69,16 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const lines = data.trim().split('\n');
+  const scores = lines.reduce((arr, line) => {
+    const illegalCharacter = getIllegalCharacter(line);
+    if (!illegalCharacter) {
+      const uncompletedChars = getUncompletedCharacters(line);
+      arr.push(getIncompleteLineScore(uncompletedChars));
+    }
+    return arr;
+  }, []).sort((a, b) => a - b);
+  return scores[Math.round((scores.length - 1) / 2)];
 }
 
 module.exports = { partOne, partTwo };
