@@ -46,6 +46,30 @@ function dfs(cave, visited, paths) {
   }
 }
 
+function dfs2(cave, visited, oneSmallCaveAlreadyVisitedTwice, paths) {
+  visited.push(cave.name);
+  if (cave.name === 'end') {
+    paths.push(visited.join(','));
+    return;
+  }
+  for (const neighbor of cave.neighbors) {
+    if (neighbor.name === "start") {
+      continue;
+    }
+    if (neighbor.isSmallCave && visited.includes(neighbor.name)) {
+      if (oneSmallCaveAlreadyVisitedTwice) {
+        continue;
+      }
+      if (visited.filter((c) => c === neighbor.name).length >= 2) {
+        continue;
+      }
+      dfs2(neighbor, [...visited], true, paths);
+    } else {
+      dfs2(neighbor, [...visited], oneSmallCaveAlreadyVisitedTwice, paths);
+    }
+  }
+}
+
 
 function partOne(data) {
   const caves = buildCaves(data);
@@ -55,7 +79,10 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const caves = buildCaves(data);
+  const paths = [];
+  dfs2(caves['start'], [], false, paths);
+  return paths.length;
 }
 
 module.exports = { partOne, partTwo };
