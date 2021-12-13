@@ -15,7 +15,7 @@ describe('part one', () => {
   });
 });
 
-describe('part two', () => {
+describe.skip('part two', () => {
 
   it('should ', () => {
     // when

@@ -72,6 +72,18 @@ function fold(dotsMap, instruction) {
   return foldedDots;
 }
 
+function print(dots, width, height) {
+  for (let y = 0 ; y < height ; y++) {
+    let line = '';
+    for (let x = 0 ; x < width ; x++) {
+      const dot = dots.get(key(x, y));
+      line += dot ? '#' : '·';
+    }
+    console.log(line);
+  }
+  console.log('\n');
+}
+
 function partOne(data) {
   const { dots, instructions } = extractData(data);
   const foldedDots = fold(dots, instructions[0]);
@@ -80,11 +92,11 @@ function partOne(data) {
 
 function partTwo(data) {
   const { dots, instructions } = extractData(data);
-  let foldedDots = null;
+  let foldedDots = dots;
   for (let i = 0; i < instructions.length; i++) {
-    foldedDots = fold(dots, instructions[i]);
+    foldedDots = fold(foldedDots, instructions[i]);
   }
-  return foldedDots.size;
+  print(foldedDots, 39, 6);
 }
 
 module.exports = { partOne, partTwo };
