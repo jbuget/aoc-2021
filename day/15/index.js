@@ -35,7 +35,7 @@ class Vertex {
   }
 }
 
-function dijkstra(graph, startId, endId) {
+function dijkstra(graph, startId) {
   const visited = new Map();
   const toBeVisited = [];
 
@@ -46,20 +46,14 @@ function dijkstra(graph, startId, endId) {
   while (toBeVisited.length > 0) {
     const vertex = toBeVisited.shift();
 
-    if (vertex.id === endId) {
-      continue;
-    }
-
     if (visited.get(vertex.id)) {
       continue;
     }
 
     visited.set(vertex.id, vertex);
 
-    console.log('visiting ' + vertex.id);
-
     vertex.adjacents.forEach((adjacent) => {
-      if ((vertex.riskLevel + adjacent.cost) <= adjacent.riskLevel) {
+      if ((vertex.riskLevel + adjacent.cost) < adjacent.riskLevel) {
         adjacent.riskLevel = vertex.riskLevel + adjacent.cost;
         adjacent.previous = vertex;
       }
@@ -95,7 +89,7 @@ function partOne(data) {
     if (left) vertex.addAdjacent(left);
   });
 
-  dijkstra(graph, '0:0', id(maxX, maxY));
+  dijkstra(graph, '0:0');
 
   const end = graph.get(id(maxX, maxY));
 
@@ -105,7 +99,69 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  return 'TODO';
+  let maxX, maxY;
+
+  const graph = data.split('\n').reduce((map, line, y) => {
+    line.split('').forEach((cost, x) => {
+      const vertex = new Vertex(x, y, parseInt(cost));
+      map.set(id(x, y), vertex);
+      maxX = x;
+    });
+    maxY = y;
+    return map;
+  }, new Map());
+
+  const completeGraph = new Map();
+  for (let i = 0 ; i < 5 ; i++) {
+    for (let j = 0 ; j < 5 ; j++) {
+      graph.forEach((vertex) => {
+        const newX = vertex.x + (i * (maxX + 1));
+        const newY = vertex.y + (j * (maxY + 1));
+        let newCost = vertex.cost + i + j;
+        newCost = ((newCost - 1) % 9) + 1;
+        completeGraph.set(id(newX, newY), new Vertex(newX, newY, newCost));
+      });
+    }
+  }
+
+  completeGraph.forEach((vertex, key, map) => {
+    const up = map.get(id(vertex.x, vertex.y - 1));
+    const right = map.get(id(vertex.x + 1, vertex.y));
+    const bottom = map.get(id(vertex.x, vertex.y + 1));
+    const left = map.get(id(vertex.x - 1, vertex.y));
+
+    if (up) vertex.addAdjacent(up);
+    if (right) vertex.addAdjacent(right);
+    if (bottom) vertex.addAdjacent(bottom);
+    if (left) vertex.addAdjacent(left);
+  });
+
+  // print
+  /*
+  let output = '';
+  for (let i = 0 ; i < (5 * (maxY + 1)) ; i++) {
+    if (i > 0 && (i % (maxY + 1) === 0)) {
+      output += '\n';
+    }
+    for (let j = 0 ; j < (5 * (maxX + 1)) ; j++) {
+      if (j > 0 && (j % (maxX + 1) === 0)) {
+        output += ' ';
+      }
+      const vertex = completeGraph.get(id(j, i));
+      output += vertex.cost;
+    }
+    output += '\n';
+  }
+  console.log(output);
+  */
+
+  const endX = (5 * (maxX + 1)) - 1;
+  const endY = (5 * (maxY + 1)) - 1;
+  console.log(`maxX=${maxX}, maxY=${maxY}\nendX=${endX}, endY=${endY}`);
+
+  dijkstra(completeGraph, '0:0');
+  const end = completeGraph.get(id(endX, endY));
+  return end.riskLevel;
 }
 
 module.exports = { partOne, partTwo };
