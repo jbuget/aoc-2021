@@ -44,7 +44,8 @@ function dijkstra(graph, startId) {
   toBeVisited.push(start);
 
   while (toBeVisited.length > 0) {
-    const vertex = toBeVisited.shift();
+
+    const vertex = toBeVisited.sort((a, b) => a.riskLevel - b.riskLevel).shift();
 
     if (visited.get(vertex.id)) {
       continue;
@@ -115,8 +116,8 @@ function partTwo(data) {
   for (let i = 0 ; i < 5 ; i++) {
     for (let j = 0 ; j < 5 ; j++) {
       graph.forEach((vertex) => {
-        const newX = vertex.x + (i * (maxX + 1));
-        const newY = vertex.y + (j * (maxY + 1));
+        const newX = vertex.x + (j * (maxX + 1));
+        const newY = vertex.y + (i * (maxY + 1));
         let newCost = vertex.cost + i + j;
         newCost = ((newCost - 1) % 9) + 1;
         completeGraph.set(id(newX, newY), new Vertex(newX, newY, newCost));
@@ -130,9 +131,9 @@ function partTwo(data) {
     const bottom = map.get(id(vertex.x, vertex.y + 1));
     const left = map.get(id(vertex.x - 1, vertex.y));
 
-    if (up) vertex.addAdjacent(up);
     if (right) vertex.addAdjacent(right);
     if (bottom) vertex.addAdjacent(bottom);
+    if (up) vertex.addAdjacent(up);
     if (left) vertex.addAdjacent(left);
   });
 
