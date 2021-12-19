@@ -14,7 +14,32 @@ class Packet {
     this.version = version;
     this.typeID = typeID;
     this.literalValue = options.literalValue;
-    this.subpackets = options.subpackets;
+    this.subpackets = options.subpackets || [];
+  }
+
+  get versionSum() {
+    return this.subpackets.reduce((sum, packet) => sum + packet.versionSum, this.version);
+  }
+
+  get value() {
+    switch (this.typeID) {
+      case 0:
+        return this.subpackets.reduce((sum, packet) => sum + packet.value, 0);
+      case 1:
+        return this.subpackets.reduce((product, packet) => product * packet.value, 1);
+      case 2:
+        return this.subpackets.map((packet) => packet.value).sort()[0];
+      case 3:
+        return this.subpackets.map((packet) => packet.value).sort()[this.subpackets.length - 1];
+      case 4:
+        return this.literalValue;
+      case 5:
+        return this.subpackets[0].value > this.subpackets[1].value ? 1 : 0;
+      case 6:
+        return this.subpackets[0].value < this.subpackets[1].value ? 1 : 0;
+      case 7:
+        return this.subpackets[0].value === this.subpackets[1].value ? 1 : 0;
+    }
   }
 }
 
@@ -40,8 +65,8 @@ function getPacketsFromBinaryTransmission(binaryString, start, end, nbPackets = 
   let packets = [];
   let offset = start;
   while (offset < end && packets.length < nbPackets) {
-    if (!packetTypeID && (end - offset) < 11) { // end padding
-      offset = end;
+    if (packetTypeID === undefined && (end - offset) < 11) { // end padding
+      offset++;
       continue;
     }
     const version = parseInt(binaryString.substring(offset, offset + 3), 2);
@@ -54,7 +79,8 @@ function getPacketsFromBinaryTransmission(binaryString, start, end, nbPackets = 
       const { packet, offset:i} = readLiteralValuePacket(binaryString, offset, binaryString.length - 1, version);
       packets.push(packet);
       offset = i;
-    } else {
+    }
+    else {
       const lengthTypeID = parseInt(binaryString.substring(offset, offset + 1), 2);
       offset += 1;
 
@@ -71,7 +97,7 @@ function getPacketsFromBinaryTransmission(binaryString, start, end, nbPackets = 
       }
       const { packets: subpackets, offset:i } = getPacketsFromBinaryTransmission(binaryString, offset, endOffset, nbSubpackets, typeID);
       const packet = new Packet(version, typeID, { subpackets });
-      packets.push(packet, ...subpackets);
+      packets.push(packet);
       offset = i;
     }
   }
@@ -81,11 +107,13 @@ function getPacketsFromBinaryTransmission(binaryString, start, end, nbPackets = 
 function partOne(data) {
   const binaryTransmission = hex2bin(data);
   const { packets } = getPacketsFromBinaryTransmission(binaryTransmission, 0, binaryTransmission.length - 1);
-  return packets.reduce((sum, packet) => (sum + packet.version), 0);
+  return packets[0].versionSum;
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const binaryTransmission = hex2bin(data);
+  const { packets } = getPacketsFromBinaryTransmission(binaryTransmission, 0, binaryTransmission.length - 1);
+  return packets[0].value;
 }
 
-module.exports = { partOne, partTwo, hex2bin, getPacketsFromBinaryTransmission, Packet };
+module.exports = { partOne, partTwo, Packet };
