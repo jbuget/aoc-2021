@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 /* https://stackoverflow.com/a/68315766 */
 function hex2bin(hexadecimalString) {
   return hexadecimalString.split('').map(i => parseInt(i, 16).toString(2).padStart(4, '0')).join('');
@@ -28,9 +30,9 @@ class Packet {
       case 1:
         return this.subpackets.reduce((product, packet) => product * packet.value, 1);
       case 2:
-        return this.subpackets.map((packet) => packet.value).sort()[0];
+        return _.minBy(this.subpackets, 'value').value;
       case 3:
-        return this.subpackets.map((packet) => packet.value).sort()[this.subpackets.length - 1];
+        return _.maxBy(this.subpackets, 'value').value;
       case 4:
         return this.literalValue;
       case 5:
@@ -65,7 +67,7 @@ function getPacketsFromBinaryTransmission(binaryString, start, end, nbPackets = 
   let packets = [];
   let offset = start;
   while (offset < end && packets.length < nbPackets) {
-    if (packetTypeID === undefined && (end - offset) < 11) { // end padding
+    if (packetTypeID === undefined && (end - offset) < 3) { // end padding
       offset++;
       continue;
     }
@@ -106,13 +108,13 @@ function getPacketsFromBinaryTransmission(binaryString, start, end, nbPackets = 
 
 function partOne(data) {
   const binaryTransmission = hex2bin(data);
-  const { packets } = getPacketsFromBinaryTransmission(binaryTransmission, 0, binaryTransmission.length - 1);
+  const { packets } = getPacketsFromBinaryTransmission(binaryTransmission, 0, binaryTransmission.length - 1, Infinity);
   return packets[0].versionSum;
 }
 
 function partTwo(data) {
   const binaryTransmission = hex2bin(data);
-  const { packets } = getPacketsFromBinaryTransmission(binaryTransmission, 0, binaryTransmission.length - 1);
+  const { packets } = getPacketsFromBinaryTransmission(binaryTransmission, 0, binaryTransmission.length - 1, Infinity);
   return packets[0].value;
 }
 
