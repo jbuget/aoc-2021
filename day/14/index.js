@@ -15,7 +15,7 @@ function extractData(data) {
 
 function applySteps(polymerTemplate, pairInsertionRules, steps) {
   let polymer = polymerTemplate;
-  console.log('polymer =', polymer);
+  // console.log('polymer =', polymer);
 
   for (let s = 0; s < steps; s++) {
     let tmpPolymer = '';
@@ -27,7 +27,7 @@ function applySteps(polymerTemplate, pairInsertionRules, steps) {
     }
     tmpPolymer += polymer[nbInsertions];
     polymer = tmpPolymer;
-    console.log('polymer =', polymer);
+    // console.log('polymer =', polymer);
   }
   return polymer;
 }
@@ -74,7 +74,7 @@ function applySteps2(polymerTemplate, pairInsertionRules, steps) {
 
 function partOne(data) {
   const { polymerTemplate, pairInsertionRules } = extractData(data);
-  const pairs = applySteps1(polymerTemplate, pairInsertionRules, 10);
+  const pairs = applySteps2(polymerTemplate, pairInsertionRules, 10);
   const quantityByElement = Object.values(pairs).reduce((quantityByElement, pair) => {
     const char = pair.key[0];
     if (!quantityByElement[char]) {

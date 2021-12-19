@@ -94,7 +94,7 @@ function partOne(data) {
 
   const end = graph.get(id(maxX, maxY));
 
-  console.log(end.path);
+  // console.log(end.path);
 
   return end.riskLevel;
 }
@@ -158,7 +158,7 @@ function partTwo(data) {
 
   const endX = (5 * (maxX + 1)) - 1;
   const endY = (5 * (maxY + 1)) - 1;
-  console.log(`maxX=${maxX}, maxY=${maxY}\nendX=${endX}, endY=${endY}`);
+  // console.log(`maxX=${maxX}, maxY=${maxY}\nendX=${endX}, endY=${endY}`);
 
   dijkstra(completeGraph, '0:0');
   const end = completeGraph.get(id(endX, endY));
