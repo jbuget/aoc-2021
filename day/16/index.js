@@ -65,10 +65,6 @@ function getPacketsFromBinaryTransmission(binaryString, start, end, nbPackets = 
   let packets = [];
   let offset = start;
   while (offset < end && packets.length < nbPackets) {
-    if (packetTypeID === undefined && (end - offset) < 3) { // end padding
-      offset++;
-      continue;
-    }
     const version = parseInt(binaryString.substring(offset, offset + 3), 2);
     offset += 3;
 
