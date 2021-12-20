@@ -10,8 +10,7 @@ describe('part one', () => {
     const actual = partOne(data);
 
     // then
-    const expected = 4140;
-    expect(actual).toStrictEqual(expected);
+    expect(actual).toStrictEqual(4140);
   });
 });
 
@@ -22,7 +21,6 @@ describe('part two', () => {
     const actual = partTwo(data);
 
     // then
-    const expected = 'TODO';
-    expect(actual).toStrictEqual(expected);
+    expect(actual).toStrictEqual(3993);
   });
 });

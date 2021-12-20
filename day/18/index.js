@@ -1,5 +1,8 @@
+const { sum, magnitude } = require('./helpers');
+
 function partOne(data) {
-  return 4140;
+  const snailfishNumbers = data.split('\n');
+  return magnitude(sum(snailfishNumbers));
 }
 
 function partTwo(data) {
