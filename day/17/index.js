@@ -85,7 +85,22 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const axis = data.split('target area: ')[1].split(', ');
+  const [x0, x1] = axis[0].replace('x=', '').split('..');
+  const [y0, y1] = axis[1].replace('y=', '').split('..');
+  const targetArea = new Area(parseInt(x0), parseInt(x1), parseInt(y0), parseInt(y1));
+
+  const successfulProbes = [];
+  for (let x = 0; x <= x1; x++) {
+    for (let y = Math.abs(y0); y >= y0 ; y--) {
+      const probe = new Probe(targetArea, {x, y });
+      if (probe.canReachedTargetArea()) {
+        successfulProbes.push(probe);
+      }
+    }
+  }
+
+  return successfulProbes.length;
 }
 
 module.exports = { partOne, partTwo };
