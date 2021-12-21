@@ -10,7 +10,7 @@ describe('part one', () => {
     const actual = partOne(data);
 
     // then
-    expect(actual).toStrictEqual('TODO');
+    expect(actual).toStrictEqual(79);
   });
 });
 
