@@ -110,7 +110,7 @@ class Scanner {
   }
 }
 
-function partOne(data) {
+function getScanners(data) {
   const lines = data.split('\n');
 
   const scanners = [];
@@ -143,7 +143,7 @@ function partOne(data) {
 
     const distancesA = scannerA.distances;
 
-    for (let i = 0; i < scanners.length; i++) {
+    for (let i = 1; i < scanners.length; i++) {
       const scannerB = scanners[i];
 
       if (!visited.get(i)) {
@@ -195,29 +195,75 @@ function partOne(data) {
             }
           }
           if (!transformation) {
-            console.error(`scannerA=${scannerA.id}, scannerB=${scannerB.id}`);
             throw new Error('Transformation not found');
           }
-          scannerB.beacons = scannerB.beacons.map(b => translate(transformation.rotate(b), transformation.translation));
-          scannerB.coordinates = translate(scannerA.coordinates, transformation.translation);
+
+          // Find inverse transformation
+
+/*
+          let opposedTranslation = [-transformation.translation[0], -transformation.translation[1], -transformation.translation[2]];
+          let inverseRotation;
+          let b0 = beaconsB[0];
+          for (let p = 0; p < rotations.length && !inverseRotation; p++) {
+            const r = rotations[p];
+            for (let q = 0; q < beaconsA.length && !inverseRotation; q++) {
+              const a = beaconsA[q];
+              if (compare(r(translate(a, opposedTranslation)), b0)) {
+                inverseRotation = r;
+              }
+            }
+          }
+          if (!inverseRotation) throw new Error('Inverse rotation not found');
+*/
+
+          if (!scannerB.coordinates) {
+            scannerB.coordinates = translate(transformation.rotate([0, 0, 0]), transformation.translation);
+            scannerB.beacons = scannerB.beacons.map(b => translate(transformation.rotate(b), transformation.translation));
+          }
           todo.push(scannerB);
         }
       }
     }
   }
+  return scanners;
+}
 
-  return scanners.reduce((beacons, scanner) => {
+function partOne(data) {
+  const scanners = getScanners(data);
+
+  const uniqueBeacons = scanners.reduce((beacons, scanner) => {
     scanner.beacons.forEach((beacon) => {
       if (!beacons.get(id(beacon))) {
         beacons.set(id(beacon), beacon);
       }
     });
     return beacons;
-  }, new Map()).size;
+  }, new Map());
+
+  console.log(uniqueBeacons);
+
+  return uniqueBeacons.size;
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const scanners = getScanners(data);
+
+  let largestManhattanDistance = 0;
+  for (let i = 0; i < scanners.length; i++) {
+    const scannerA = scanners[i];
+    for (let j = i + 1; j < scanners.length; j++) {
+      const scannerB = scanners[j];
+      const manhattanDistance =
+        Math.abs(scannerB.coordinates[0] - scannerA.coordinates[0]) +
+        Math.abs(scannerB.coordinates[1] - scannerA.coordinates[1]) +
+        Math.abs(scannerB.coordinates[2] - scannerA.coordinates[2]);
+      console.log(`scannerA=${scannerA.id}, scannerB=${scannerB.id}, manhattanDistance=${manhattanDistance}`);
+      if (manhattanDistance > largestManhattanDistance) {
+        largestManhattanDistance = manhattanDistance;
+      }
+    }
+  }
+  return largestManhattanDistance;
 }
 
 module.exports = { partOne, partTwo };
