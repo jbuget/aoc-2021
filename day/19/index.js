@@ -72,14 +72,7 @@ class Distance {
       + (this.beaconA[1] - this.beaconB[1]) ** 2
       + (this.beaconA[2] - this.beaconB[2]) ** 2;
 
-    const dx = this.beaconA.x - this.beaconB.x;
-    const dy = this.beaconA.y - this.beaconB.y;
-    const dz = this.beaconA.z - this.beaconB.z;
-
-    const min = Math.min(Math.abs(dx), Math.abs(dy), Math.abs(dz));
-    const max = Math.max(Math.abs(dx), Math.abs(dy), Math.abs(dz));
-
-    return `${euclideanDistance}:${min}:${max}`;
+    return euclideanDistance;
   }
 }
 
@@ -151,9 +144,9 @@ function getScanners(data) {
         let overlappedDistances = 0;
         let overlappedDistancesA = [];
         let overlappedDistancesB = [];
-        for (let j = 0; j < distancesA.length; j++) {
+        for (let j = 0; j < distancesA.length && overlappedDistances < 66; j++) {
           const distanceA = distancesA[j];
-          for (let k = 0; k < distancesB.length; k++) {
+          for (let k = 0; k < distancesB.length && overlappedDistances < 66; k++) {
             const distanceB = distancesB[k];
             if (distanceA.value === distanceB.value) {
               overlappedDistances++;
@@ -188,7 +181,7 @@ function getScanners(data) {
                   matchingBeacons.push(matchingBeacon);
                 }
 
-                if (matchingBeacons.length > 10) {
+                if (matchingBeacons.length > 6) {
                   transformation = { rotate, translation };
                 }
               }
@@ -197,24 +190,6 @@ function getScanners(data) {
           if (!transformation) {
             throw new Error('Transformation not found');
           }
-
-          // Find inverse transformation
-
-/*
-          let opposedTranslation = [-transformation.translation[0], -transformation.translation[1], -transformation.translation[2]];
-          let inverseRotation;
-          let b0 = beaconsB[0];
-          for (let p = 0; p < rotations.length && !inverseRotation; p++) {
-            const r = rotations[p];
-            for (let q = 0; q < beaconsA.length && !inverseRotation; q++) {
-              const a = beaconsA[q];
-              if (compare(r(translate(a, opposedTranslation)), b0)) {
-                inverseRotation = r;
-              }
-            }
-          }
-          if (!inverseRotation) throw new Error('Inverse rotation not found');
-*/
 
           if (!scannerB.coordinates) {
             scannerB.coordinates = translate(transformation.rotate([0, 0, 0]), transformation.translation);
@@ -240,8 +215,6 @@ function partOne(data) {
     return beacons;
   }, new Map());
 
-  console.log(uniqueBeacons);
-
   return uniqueBeacons.size;
 }
 
@@ -257,7 +230,6 @@ function partTwo(data) {
         Math.abs(scannerB.coordinates[0] - scannerA.coordinates[0]) +
         Math.abs(scannerB.coordinates[1] - scannerA.coordinates[1]) +
         Math.abs(scannerB.coordinates[2] - scannerA.coordinates[2]);
-      console.log(`scannerA=${scannerA.id}, scannerB=${scannerB.id}, manhattanDistance=${manhattanDistance}`);
       if (manhattanDistance > largestManhattanDistance) {
         largestManhattanDistance = manhattanDistance;
       }
