@@ -3,7 +3,7 @@ const {
   partOne,
   partTwo,
   selectInputPixels,
-  convertPixelsToBinaryNumber,
+  convertPixelsToBinaryNumberString,
   getOutputPixelFromBinaryNumber,
   countLitPixels
 } = require('./index');
@@ -12,37 +12,37 @@ const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8').trim();
 
 describe('#selectInputPixels', () => {
 
-  it('should ', () => {
-    // given
-    const inputImage = [
-      '#..#.',
-      '#....',
-      '##..#',
-      '..#..',
-      '..###',
-    ];
+  [
+    { pixel: [5, 10], expected: '...#...#.' },
+    { pixel: [0, 0], expected: '....#..#.' },
+    { pixel: [1, 0], expected: '...#..#..' },
+    { pixel: [0, 1], expected: '.#..#..##' },
+    { pixel: [4, 4], expected: '...##....' },
+  ].forEach((usecase) => {
+    it(`selectInputPixels(${usecase.pixel}) should be "${usecase.expected}"`, () => {
+      // given
+      const inputImage = [
+        '#..#.',
+        '#....',
+        '##..#',
+        '..#..',
+        '..###',
+      ];
 
-    // when
-    const actual = selectInputPixels(inputImage, [5, 10]);
+      // when
+      const actual = selectInputPixels(inputImage, usecase.pixel);
 
-    // then
-    expect(actual).toStrictEqual('...#...#.');
+      // then
+      expect(actual).toStrictEqual(usecase.expected);
+    });
   });
 });
 
-describe('#convertPixelsToBinaryNumber', () => {
+describe('#convertPixelsToBinaryNumberString', () => {
 
-  it('middle pixel [5,10]', () => {
+  it('should be ok', () => {
     // when
-    const actual = convertPixelsToBinaryNumber('...#...#.');
-
-    // then
-    expect(actual).toStrictEqual('000100010');
-  });
-
-  it('top-left pixel [0,0]', () => {
-    // when
-    const actual = convertPixelsToBinaryNumber('...#...#.');
+    const actual = convertPixelsToBinaryNumberString('...#...#.');
 
     // then
     expect(actual).toStrictEqual('000100010');
@@ -51,7 +51,7 @@ describe('#convertPixelsToBinaryNumber', () => {
 
 describe('#getOutputPixelFromBinaryNumber', () => {
 
-  it('should ', () => {
+  it('should be ok', () => {
     // given
     const imageEnhancementAlgorithm = '..#.#..#####.#.#.#.###.##.....###.##.#..###.####..';
 
@@ -65,9 +65,9 @@ describe('#getOutputPixelFromBinaryNumber', () => {
 
 describe('#countLitPixels', () => {
 
-  it('should ', () => {
+  it('should be ok', () => {
     // given
-    const image =  [
+    const image = [
       '...............',
       '...............',
       '...............',
@@ -86,7 +86,7 @@ describe('#countLitPixels', () => {
     ];
 
     // when
-    const actual =countLitPixels(image);
+    const actual = countLitPixels(image);
 
     // then
     expect(actual).toStrictEqual(35);
