@@ -79,7 +79,15 @@ function partOne(data) {
 }
 
 function partTwo(data) {
-  return 'TODO';
+  const lines = data.split('\n');
+  const algorithm = lines[0];
+
+  const inputImage = [];
+  for (let i = 2; i < lines.length; i++) {
+    inputImage.push(lines[i]);
+  }
+  let outputImage = enhanceImage(algorithm, inputImage, 50);
+  return countLitPixels(outputImage);
 }
 
 module.exports = {

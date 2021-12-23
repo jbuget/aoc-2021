@@ -83,6 +83,6 @@ xdescribe('part two', () => {
     const actual = partTwo(data);
 
     // then
-    expect(actual).toStrictEqual('TODO');
+    expect(actual).toStrictEqual(3351);
   });
 });
