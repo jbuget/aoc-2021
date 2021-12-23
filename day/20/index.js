@@ -1,34 +1,8 @@
-function selectInputPixels(inputImage, [x, y]) {
-  if (x > 0 && x < inputImage[0].length - 1 && y > 0 && y < inputImage.length - 1) {
-    return [
-      inputImage[y - 1][x - 1], inputImage[y - 1][x], inputImage[y - 1][x + 1],
-      inputImage[y][x - 1], inputImage[y][x], inputImage[y][x + 1],
-      inputImage[y + 1][x - 1], inputImage[y + 1][x], inputImage[y + 1][x + 1],
-    ].join('');
+function selectPixel(image, [x, y], paddingPixel) {
+  if (typeof image[y] !== "undefined" && typeof image[y][x] !== "undefined") {
+    return image[y][x];
   }
-
-  if (x === 0 && y === 0) {
-    return `....${inputImage[y][x]}${inputImage[y][x + 1]}.${inputImage[y + 1][x]}${inputImage[y + 1][x + 1]}`;
-  }
-  if (x === inputImage[0].length - 1 && y === 0) {
-    return `...${inputImage[y][x - 1]}${inputImage[y][x]}.${inputImage[y + 1][x - 1]}${inputImage[y + 1][x]}.`;
-  }
-  if (x === inputImage[0].length - 1 && y === inputImage.length - 1) {
-    return `${inputImage[y - 1][x - 1]}${inputImage[y - 1][x]}.${inputImage[y][x - 1]}${inputImage[y][x]}....`;
-  }
-  if (x === 0 && y === inputImage.length - 1) {
-    return `.${inputImage[y - 1][x]}${inputImage[y - 1][x + 1]}.${inputImage[y][x]}${inputImage[y][x + 1]}...`;
-  }
-  if (x === 0) {
-    return `.${inputImage[y - 1][x]}${inputImage[y - 1][x + 1]}.${inputImage[y][x]}${inputImage[y][x + 1]}.${inputImage[y + 1][x]}${inputImage[y + 1][x + 1]}`;
-  }
-  if (x === inputImage[0].length - 1) {
-    return `${inputImage[y - 1][x - 1]}${inputImage[y - 1][x]}.${inputImage[y][x - 1]}${inputImage[y][x]}.${inputImage[y + 1][x - 1]}${inputImage[y + 1][x]}.`;
-  }
-  if (y === 0) {
-    return `...${inputImage[y][x - 1]}${inputImage[y][x]}${inputImage[y][x + 1]}${inputImage[y + 1][x - 1]}${inputImage[y + 1][x]}${inputImage[y + 1][x + 1]}`;
-  }
-  return `${inputImage[y - 1][x - 1]}${inputImage[y - 1][x]}${inputImage[y - 1][x + 1]}${inputImage[y][x - 1]}${inputImage[y][x]}${inputImage[y][x + 1]}...`;
+  return paddingPixel;
 }
 
 function convertPixelsToBinaryNumberString(pixelsString) {
@@ -43,15 +17,34 @@ function getOutputPixelFromBinaryNumber(algorithm, binaryNumber) {
   return algorithm[parseInt(binaryNumber, 2)];
 }
 
-function enhanceImage(algorithm, inputImage) {
-  return inputImage.reduce((outputImage, line, y) => {
-    const outputPixels = line.split('').map((char, x) => {
-      const pixelsString = selectInputPixels(inputImage, [x, y]);
-      return getOutputPixelFromBinaryNumber(algorithm, convertPixelsToBinaryNumberString(pixelsString));
-    }).join('');
-    outputImage.push(outputPixels);
-    return outputImage;
-  }, []);
+function enhanceImage(algorithm, inputImage, steps) {
+  let outputImage = inputImage;
+  printImage(outputImage);
+
+  for (let s = 0; s < steps; s++) {
+    const paddingPixel = (s % 2 === 0) ? algorithm[511] : algorithm[0];
+
+    let newImage = [];
+    for (let y = -1; y <= outputImage.length; y++) {
+      let newLine = '';
+      for (let x = -1; x <= outputImage.length; x++) {
+        let pixelsString = '';
+        for (let i = -1; i <= 1; i++) {
+          for (let j = -1; j <= 1; j++) {
+            pixelsString += selectPixel(outputImage, [x + j, y + i], paddingPixel);
+            //console.log(`[x=${x},y=${y}], (j=${j},i=${i})`);
+          }
+        }
+        const binaryNumber = convertPixelsToBinaryNumberString(pixelsString);
+        //console.log(`pixelsString=${pixelsString}, binaryNumber=${binaryNumber}`);
+        newLine += getOutputPixelFromBinaryNumber(algorithm, binaryNumber);
+      }
+      newImage.push(newLine);
+    }
+    outputImage = newImage;
+    printImage(outputImage);
+  }
+  return outputImage;
 }
 
 function printImage(image) {
@@ -81,15 +74,7 @@ function partOne(data) {
   for (let i = 2; i < lines.length; i++) {
     inputImage.push(lines[i]);
   }
-
-  let outputImage = inputImage;
-
-  // First
-  outputImage = enhanceImage(algorithm, outputImage);
-
-  // Twice
-  outputImage = enhanceImage(algorithm, outputImage);
-
+  let outputImage = enhanceImage(algorithm, inputImage, 2);
   return countLitPixels(outputImage);
 }
 
@@ -100,7 +85,6 @@ function partTwo(data) {
 module.exports = {
   partOne,
   partTwo,
-  selectInputPixels,
   convertPixelsToBinaryNumberString,
   getOutputPixelFromBinaryNumber,
   countLitPixels

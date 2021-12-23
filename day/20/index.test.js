@@ -2,7 +2,6 @@ const fs = require('fs');
 const {
   partOne,
   partTwo,
-  selectInputPixels,
   convertPixelsToBinaryNumberString,
   getOutputPixelFromBinaryNumber,
   countLitPixels
@@ -10,37 +9,6 @@ const {
 
 const data = fs.readFileSync(`${__dirname}/input.test.txt`, 'utf8').trim();
 
-describe('#selectInputPixels', () => {
-
-  [
-    { pixel: [2, 2], expected: '...#...#.' },
-    { pixel: [0, 0], expected: '....#..#.' },
-    { pixel: [1, 0], expected: '...#..#..' },
-    { pixel: [4, 0], expected: '...#.....' },
-    { pixel: [4, 1], expected: '#......#.' },
-    { pixel: [4, 4], expected: '...##....' },
-    { pixel: [1, 4], expected: '..#..#...' },
-    { pixel: [0, 4], expected: '.........' },
-    { pixel: [0, 1], expected: '.#..#..##' },
-  ].forEach((usecase) => {
-    it(`selectInputPixels(${usecase.pixel}) should be "${usecase.expected}"`, () => {
-      // given
-      const inputImage = [
-        '#..#.',
-        '#....',
-        '##..#',
-        '..#..',
-        '..###',
-      ];
-
-      // when
-      const actual = selectInputPixels(inputImage, usecase.pixel);
-
-      // then
-      expect(actual).toStrictEqual(usecase.expected);
-    });
-  });
-});
 
 describe('#convertPixelsToBinaryNumberString', () => {
 
